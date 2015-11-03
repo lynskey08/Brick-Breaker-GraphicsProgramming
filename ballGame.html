@@ -13,6 +13,11 @@
           /*Create border around canvas*/
           canvas{
             border:1px solid black;
+            margin: auto;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
     </style>
 
@@ -31,38 +36,34 @@
       
       //Create ball as an object
       var ball = {
-         x : 50 //x coordinate of the ball
-        ,y : 10 //y coordinate of the ball
-        ,r : 5
-        ,vy : 1
-      };
+        position: {x: 200, y: 10}
+        , radius: 5
+        , velocity: {x: 2, y: 5}
+      }
 
 
       // A function to repeat every time the animation loops.
       function repeatme() {
           
         //This constantly updates the ball so it doesn't leave a single straight line
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-          
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         // Draw the ball
         ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
+        ctx.arc(ball.position.x, ball.position.y, ball.radius, 0, 2 * Math.PI);
         ctx.fill();
         
         // Update the y location.
-          if(ball.y >= canvas.height - ball.r){
-              ball.vy =- ball.vy;
-          }
-            
-          else if(ball.y <= ball.r){
-              ball.vy =- ball.vy;
-          }
-
-          ball.y += ball.vy;
-          
-          window.requestAnimationFrame(repeatme);
-            
-            
+		ball.position.x += ball.velocity.x;
+        ball.position.y += ball.velocity.y;
+		
+		// Keep the animation going while the ball has not touched the canvas bottom.
+        if ((ball.position.x >= canvas.width - ball.radius) ||  (ball.position.x <= ball.radius))
+          ball.velocity.x = -ball.velocity.x;    
+		if ((ball.position.y >= canvas.height - ball.radius) ||  (ball.position.y <= ball.radius))
+          ball.velocity.y = -ball.velocity.y;
+        
+        window.requestAnimationFrame(repeatme);  
       }
       
       // Get the animation going.

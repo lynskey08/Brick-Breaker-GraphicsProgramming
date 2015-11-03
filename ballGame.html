@@ -10,35 +10,38 @@
       body {
           background-color: white;
       }
-          /*Create border around canvas*/
-          canvas{
-            border:1px solid black;
-            margin: auto;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
+      /*Creates canvas with black border in the center*/
+      canvas{
+         display: block;
+         position: absolute;
+         margin: auto;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         border: 1px solid black;
+      }
     </style>
 
   </head>
 
   <body>
 
-    <canvas id="canvas-for-ball"></canvas>
+    
+    <canvas id="canvas" height="650" width="1000"></canvas>
 
     <script type="text/javascript">
 
       // Gets a handle to the element with id canvasOne.
-      var canvas = document.getElementById("canvas-for-ball");
+      var canvas = document.getElementById("canvas");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
       
       //Create ball as an object
       var ball = {
-        position: {x: 200, y: 10}
-        , radius: 5
-        , velocity: {x: 2, y: 5}
+        position: {x: 10, y: 10}//x coordinate and y coordinate of the ball
+        , radius: 10 //radius(thickness of the ball)
+        , velocity: {x: 2, y: 5}//x and y velocity coordinates(speed of the ball)
       }
 
 
@@ -51,18 +54,23 @@
         // Draw the ball
         ctx.beginPath();
         ctx.arc(ball.position.x, ball.position.y, ball.radius, 0, 2 * Math.PI);
-        ctx.fill();
+        ctx.fill();//Makes the circle filled in
         
-        // Update the y location.
+        // Update the x and y coordinates of the ball to keep it moving.
 		ball.position.x += ball.velocity.x;
         ball.position.y += ball.velocity.y;
 		
 		// Keep the animation going while the ball has not touched the canvas bottom.
-        if ((ball.position.x >= canvas.width - ball.radius) ||  (ball.position.x <= ball.radius))
-          ball.velocity.x = -ball.velocity.x;    
-		if ((ball.position.y >= canvas.height - ball.radius) ||  (ball.position.y <= ball.radius))
-          ball.velocity.y = -ball.velocity.y;
-        
+        if ((ball.position.x >= canvas.width - ball.radius) ||  (ball.position.x <= ball.radius)){
+            ball.velocity.x = -ball.velocity.x;//stops the ball from
+        }    
+		else if ((ball.position.y >= canvas.height - ball.radius) ||  (ball.position.y <= ball.radius)){
+            ball.velocity.y = -ball.velocity.y;//stops the ball from falling off the bottom of the canvas
+        }
+          
+        /*Tells the browser you wish to perform an animation 
+        and requests the browser to call a specific function 
+        to update an animation before the next repaint*/
         window.requestAnimationFrame(repeatme);  
       }
       

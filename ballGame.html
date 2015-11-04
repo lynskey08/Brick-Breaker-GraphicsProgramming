@@ -15,10 +15,6 @@
          display: block;
          position: absolute;
          margin: auto;
-         top: 0;
-         bottom: 0;
-         left: 0;
-         right: 0;
          border: 1px solid black;
       }
     </style>
@@ -28,55 +24,65 @@
   <body>
 
     
-    <canvas id="canvas" height="650" width="1000"></canvas>
+    <canvas id="Canvas" height="420" width="580"></canvas>
 
     <script type="text/javascript">
 
       // Gets a handle to the element with id canvasOne.
-      var canvas = document.getElementById("canvas");
+      var canvas = document.getElementById("Canvas");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
+       
+      //ball variables
+      var x = canvas.width/2;
+      var y = canvas.height-30;
+      var r = 10;
+      var velocityX = 3;
+      var velocityY = 3;
+        
+      //paddle variables
+      var paddleW = 100;//paddle width
+      var paddleH = 15;//paddle height
+      var paddleX = (canvas.width - paddleW)/2;
       
-      //Create ball as an object
-      var ball = {
-        position: {x: 10, y: 10}//x coordinate and y coordinate of the ball
-        , radius: 10 //radius(thickness of the ball)
-        , velocity: {x: 2, y: 5}//x and y velocity coordinates(speed of the ball)
+      // Draw the ball
+      function ball() { 
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.fill();//Makes the circle filled in
+        ctx.closePath();
       }
-
-
+    
+      
       // A function to repeat every time the animation loops.
       function repeatme() {
-          
+        
         //This constantly updates the ball so it doesn't leave a single straight line
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw the ball
-        ctx.beginPath();
-        ctx.arc(ball.position.x, ball.position.y, ball.radius, 0, 2 * Math.PI);
-        ctx.fill();//Makes the circle filled in
-        
-        // Update the x and y coordinates of the ball to keep it moving.
-		ball.position.x += ball.velocity.x;
-        ball.position.y += ball.velocity.y;
-		
-		// Keep the animation going while the ball has not touched the canvas bottom.
-        if ((ball.position.x >= canvas.width - ball.radius) ||  (ball.position.x <= ball.radius)){
-            ball.velocity.x = -ball.velocity.x;//stops the ball from
+        //canvas.width = canvas.width;  
+        ball();
+
+		// Stops the animation from leaving the canvas(collision decection).
+        if (x + velocityX > canvas.width - r || x + velocityX < r) {
+            velocityX =- velocityX;
         }    
-		else if ((ball.position.y >= canvas.height - ball.radius) ||  (ball.position.y <= ball.radius)){
-            ball.velocity.y = -ball.velocity.y;//stops the ball from falling off the bottom of the canvas
+        else if (y + velocityY > canvas.height - r || y + velocityY < r) {
+            velocityY =- velocityY;
         }
           
-        /*Tells the browser you wish to perform an animation 
-        and requests the browser to call a specific function 
-        to update an animation before the next repaint*/
-        window.requestAnimationFrame(repeatme);  
-      }
-      
+        // Update the x and y coordinates of the ball to keep it moving.
+		x += velocityX;
+        y += velocityY;
+          
+        //Tells the browser you wish to perform an animation 
+        //and requests the browser to call a specific function 
+        //to update an animation before the next repaint
+        //window.requestAnimationFrame(repeatme);   
+      } 
       // Get the animation going.
-      repeatme();
-
+      setInterval(repeatme, 8);
+      
+        
     </script>
 
   </body>

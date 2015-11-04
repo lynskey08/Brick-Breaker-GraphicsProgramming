@@ -70,18 +70,6 @@
           } 
       }
       */
-       
-      /*
-      //paddle variables
-      var paddleW = 100;//paddle width
-      var paddleH = 15;//paddle height
-      var paddleX = (canvas.width - paddleW)/2;
-       */ 
-        
-      //Arrow Control Key variables
-      var leftArrowKey = false;
-      var rightArrowKey = false;
-
       
       // Function to draw the ball
       function ball() { 
@@ -90,6 +78,19 @@
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
+        
+      function movePaddle() {
+          if (event.keyCode == 39){
+              if(paddle.position.y <880){
+                  paddle.position.y += 20;
+              }     
+          }
+          else if (event.keyCode == 37) {
+              if(paddle.position.y >0){
+                  paddle.position.y -= 20;
+              }
+          }
+      }//movePaddle
       
     /*
       //Function to draw the paddle
@@ -109,7 +110,7 @@
         ball();//calls the ball function
         
         ctx.beginPath(); 
-        paddle();//calls the paddle function
+        paddle.drawPaddle();//calls the paddle function
         ctx.closePath();
 
 		// Stops the animation from leaving the canvas(collision decection).

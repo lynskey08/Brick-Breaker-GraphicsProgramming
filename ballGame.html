@@ -24,7 +24,7 @@
   <body>
 
     
-    <canvas id="Canvas" height="420" width="580"></canvas>
+    <canvas id="Canvas" height="550" width="1000"></canvas>
 
     <script type="text/javascript">
 
@@ -39,17 +39,49 @@
       var r = 10;
       var velocityX = 3;
       var velocityY = 3;
+      
         
-        
+      var paddle = {
+            position: {
+                x: 530,
+                y: 490
+            },
+            size: {
+                w: 120,
+                h: 20
+            },
+            //Draw the paddle function
+            drawPaddle: function(){ 
+                //ctx.beginPath();
+              ctx.fillRect(paddle.position.y, paddle.position.x, paddle.size.w, paddle.size.h);
+                //ctx.closePath();
+            }
+        }
+      /*  
+      var paddle = {
+         position: {x: 50, y: 10}
+        , paddleW = 100;//paddle width
+        , paddleH = 15;//paddle height
+        , paddleX = (canvas.width - paddleW)/2;
+        , drawPaddle: function() {
+              ctx.beginPath();
+              ctx.fillRect(paddleX, canvas.height-paddleH, paddleW, paddleH);
+              ctx.closePath();
+          } 
+      }
+      */
+       
+      /*
       //paddle variables
       var paddleW = 100;//paddle width
       var paddleH = 15;//paddle height
       var paddleX = (canvas.width - paddleW)/2;
-        
+       */ 
         
       //Arrow Control Key variables
       var leftArrowKey = false;
       var rightArrowKey = false;
+
       
       // Function to draw the ball
       function ball() { 
@@ -58,14 +90,15 @@
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
-        
+      
+    /*
       //Function to draw the paddle
       function paddle() {
           ctx.beginPath();
           ctx.fillRect(paddleX, canvas.height-paddleH, paddleW, paddleH);
           ctx.closePath();
       }
-        
+      */
         
       // A function to repeat every time the animation loops.
       function repeatme() {
@@ -74,7 +107,10 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //canvas.width = canvas.width;  
         ball();//calls the ball function
+        
+        ctx.beginPath(); 
         paddle();//calls the paddle function
+        ctx.closePath();
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (x + velocityX > canvas.width - r || x + velocityX < r) {
@@ -91,10 +127,12 @@
         //Tells the browser you wish to perform an animation 
         //and requests the browser to call a specific function 
         //to update an animation before the next repaint
-        //window.requestAnimationFrame(repeatme);   
+        //window.requestAnimationFrame(repeatme); 
+          
+        window.addEventListener('keydown', movePaddle, true);
       } 
       // Get the animation going.
-      setInterval(repeatme, 8);
+      setInterval(repeatme, 10);
       
         
     </script>

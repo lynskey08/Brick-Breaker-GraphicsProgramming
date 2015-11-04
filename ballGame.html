@@ -40,27 +40,41 @@
       var velocityX = 3;
       var velocityY = 3;
         
+        
       //paddle variables
       var paddleW = 100;//paddle width
       var paddleH = 15;//paddle height
       var paddleX = (canvas.width - paddleW)/2;
+        
+        
+      //Arrow Control Key variables
+      var leftArrowKey = false;
+      var rightArrowKey = false;
       
-      // Draw the ball
+      // Function to draw the ball
       function ball() { 
         ctx.beginPath();
         ctx.arc(x, y, r, 0, 2 * Math.PI);
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
-    
-      
+        
+      //Function to draw the paddle
+      function paddle() {
+          ctx.beginPath();
+          ctx.fillRect(paddleX, canvas.height-paddleH, paddleW, paddleH);
+          ctx.closePath();
+      }
+        
+        
       // A function to repeat every time the animation loops.
       function repeatme() {
         
         //This constantly updates the ball so it doesn't leave a single straight line
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //canvas.width = canvas.width;  
-        ball();
+        ball();//calls the ball function
+        paddle();//calls the paddle function
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (x + velocityX > canvas.width - r || x + velocityX < r) {

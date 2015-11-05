@@ -34,21 +34,16 @@
       var ctx = canvas.getContext("2d");
        
       //ball variables
-      var x = canvas.width/2;
-      var y = canvas.height-30;
-      var r = 10;
-      var velocityX = 3;
-      var velocityY = 3;
-      
+      var ball = {"x": canvas.width/4, "y": 100, "r": 10, "velocityX": 3, "velocityY": 3};
         
       var paddle = {
             position: {
-                x: 530,
-                y: 490
+                x: 530,//places the paddle 530px down as the height of the canvas is 550px giving only 20px for the paddle height
+                y: 470//the starting position of the paddle on the x-axis on the bottom of the canvas
             },
             size: {
-                w: 120,
-                h: 20
+                w: 120,//width of the paddle
+                h: 20//height of the paddle
             },
             //Draw the paddle function
             drawPaddle: function(){ 
@@ -72,20 +67,21 @@
       */
       
       // Function to draw the ball
-      function ball() { 
+      function drawBall() { 
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
-        
+      
+      //Function to move the left and right arrow keys
       function movePaddle() {
-          if (event.keyCode == 39){
+          if (event.keyCode == 39) {//right arrow
               if(paddle.position.y <880){
                   paddle.position.y += 20;
               }     
           }
-          else if (event.keyCode == 37) {
+          else if (event.keyCode == 37) {//left arrow key
               if(paddle.position.y >0){
                   paddle.position.y -= 20;
               }
@@ -104,26 +100,54 @@
       // A function to repeat every time the animation loops.
       function repeatme() {
         
-        //This constantly updates the ball so it doesn't leave a single straight line
+        //This constantly updates the moving objects so it doesn't leave a single straight line
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //canvas.width = canvas.width;  
-        ball();//calls the ball function
+        drawBall();//calls the draw ball function
         
         ctx.beginPath(); 
-        paddle.drawPaddle();//calls the paddle function
+        paddle.drawPaddle();//calls the drawPaddle function
         ctx.closePath();
 
 		// Stops the animation from leaving the canvas(collision decection).
-        if (x + velocityX > canvas.width - r || x + velocityX < r) {
-            velocityX =- velocityX;
+        if (ball.x + ball.velocityX > canvas.width - ball.r || ball.x + ball.velocityX < ball.r) {
+            ball.velocityX  = -ball.velocityX;
         }    
-        else if (y + velocityY > canvas.height - r || y + velocityY < r) {
-            velocityY =- velocityY;
-        }
+        /*if (ball.y + ball.velocityY + ball.r <= 0) {
+            ball.velocityY -= ball.velocityY;
+        }*/
           
+        if ((ball.y > paddle.position.x - ball.r) && ((ball.x > paddle.position.y &&
+                    (ball.x < paddle.position.y + 120))) || (ball.y <= ball.r))
+               ball.velocityY = -ball.velocityY;
+
+        else if (ball.y + ball.velocityY > canvas.height + ball.r) {
+            alert("Game over!");
+            ball.x = canvas.width/4;
+            ball.y = 100;
+        }
+        
+          
+        /*
+        if (colliding(ball, paddle))
+        {
+            console.log("Colliding");
+            ball.velocityX -= ball.velocityX;
+            ball.velocityY -= ball.velocityY;
+        }*/
+        /*
+        else if (y + velocityY > canvas.height - r)
+            if(x > paddle.position.x && x < paddle.position.x + paddle.size){
+                velocityY =- velocityY;
+            }
+            else{
+                alert("Game Over!");
+                document.location.reload();
+            }
+        */ 
         // Update the x and y coordinates of the ball to keep it moving.
-		x += velocityX;
-        y += velocityY;
+		ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
           
         //Tells the browser you wish to perform an animation 
         //and requests the browser to call a specific function 
@@ -132,6 +156,7 @@
           
         window.addEventListener('keydown', movePaddle, true);
       } 
+        
       // Get the animation going.
       setInterval(repeatme, 10);
       

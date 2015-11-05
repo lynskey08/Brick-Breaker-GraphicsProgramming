@@ -33,9 +33,10 @@
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
        
-      //ball variables
+      //ball object variables
       var ball = {"x": canvas.width/4, "y": 100, "r": 10, "velocityX": 3, "velocityY": 3};
-        
+       
+      //paddle object variables with drawPaddle function inside
       var paddle = {
             position: {
                 x: 530,//places the paddle 530px down as the height of the canvas is 550px giving only 20px for the paddle height
@@ -48,24 +49,32 @@
             //Draw the paddle function
             drawPaddle: function(){ 
                 //ctx.beginPath();
-              ctx.fillRect(paddle.position.y, paddle.position.x, paddle.size.w, paddle.size.h);
+              ctx.fillRect(paddle.position.y, paddle.position.x, paddle.size.w, paddle.size.h); //draws the paddle and positions it
                 //ctx.closePath();
             }
-        }
-      /*  
-      var paddle = {
-         position: {x: 50, y: 10}
-        , paddleW = 100;//paddle width
-        , paddleH = 15;//paddle height
-        , paddleX = (canvas.width - paddleW)/2;
-        , drawPaddle: function() {
-              ctx.beginPath();
-              ctx.fillRect(paddleX, canvas.height-paddleH, paddleW, paddleH);
-              ctx.closePath();
-          } 
-      }
-      */
+       }
       
+       //brick object variables
+      var brick = {
+          rows: 3,
+          columns: 5,
+          width: 75,
+          height: 20,
+          padding: 10,//the padding between the bricks so they wont touch eachother
+          topOffSet: 30,//the offsets is so that the bricks wont be drawn directly from the edge of the canvas
+          leftOffSet: 30;
+      }
+      
+      //bricks two dimensional array - all bricks will be held here
+      var bricks = [];
+      for(c = 0; c < colCount; c++) {//brick columns
+          bricks[c] = [];
+          for(r = 0; r < rowCount; r++) {brick rows
+              bricks[c][r] = { x: 0, y: 0 };//to position the bricks
+          }
+      }
+
+
       // Function to draw the ball
       function drawBall() { 
         ctx.beginPath();
@@ -118,33 +127,15 @@
         }*/
           
         if ((ball.y > paddle.position.x - ball.r) && ((ball.x > paddle.position.y &&
-                    (ball.x < paddle.position.y + 120))) || (ball.y <= ball.r))
-               ball.velocityY = -ball.velocityY;
-
+                    (ball.x < paddle.position.y + 120))) || (ball.y <= ball.r)){
+            ball.velocityY = -ball.velocityY;
+        }
         else if (ball.y + ball.velocityY > canvas.height + ball.r) {
             alert("Game over!");
             ball.x = canvas.width/4;
             ball.y = 100;
         }
-        
-          
-        /*
-        if (colliding(ball, paddle))
-        {
-            console.log("Colliding");
-            ball.velocityX -= ball.velocityX;
-            ball.velocityY -= ball.velocityY;
-        }*/
-        /*
-        else if (y + velocityY > canvas.height - r)
-            if(x > paddle.position.x && x < paddle.position.x + paddle.size){
-                velocityY =- velocityY;
-            }
-            else{
-                alert("Game Over!");
-                document.location.reload();
-            }
-        */ 
+
         // Update the x and y coordinates of the ball to keep it moving.
 		ball.x += ball.velocityX;
         ball.y += ball.velocityY;

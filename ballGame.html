@@ -34,7 +34,9 @@
       var ctx = canvas.getContext("2d");
        
       //ball object variables
-      var ball = {"x": canvas.width/4, "y": 250, "r": 10, "velocityX": 3, "velocityY": 3};
+      var ball = {"x": canvas.width/4, "y": 300, "r": 10, "velocityX": 3, "velocityY": 3};
+      var bricksBroken = 0;//for counting the amount of brick you've broke with the ball
+      var lives = 3;
         
 
       //paddle object variables with drawPaddle function inside
@@ -131,15 +133,27 @@
                 for(row=0; row<rowCount; row++) {
                     var b = bricks[col][row];
                     if(b.status==1){
-                        //if the brick is his it's status is set to 0, which makes the brick disappear
+                        //if the brick is hit, it's status is set to 0, which makes the brick disappear
                         if((ball.x > b.x) && (ball.x < b.x+width) && (ball.y > b.y) && (ball.y < b.y+height)) {
                             ball.velocityY = -ball.velocityY;
                             b.status = 0;
+                            bricksBroken++;
+                            if(bricksBroken == rowCount * colCount){//if all the bricks are broken then this if will execute
+                                alert("YOU WIN!");//message to pop up when you win
+                                document.location.reload();//reloads the page after you broken ann the bricks
+                            }
                         }
                     }
                     
                 }
             }
+        }
+        
+        //displays the amount of bricks you've brokem
+        function bricksBroke(){
+            ctx.font = "16px Cambria";
+            ctx.fillStyle = "#CC00CC";
+            ctx.fillText("Bricks Broken: " +bricksBroken, 8, 20);
         }
         
         
@@ -154,6 +168,7 @@
         drawBall();//calls the draw ball function
         paddle.drawPaddle();//calls the drawPaddle function
         brickCollisionDetection();//calls the brick collision detection function
+        bricksBroke();//
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (ball.x + ball.velocityX > canvas.width - ball.r || ball.x + ball.velocityX < ball.r) {
@@ -167,18 +182,14 @@
         //if the ball hit the bottom of the canvas the game ends
         else if (ball.y + ball.velocityY > canvas.height + ball.r) {
             alert("Game over!");
-            ball.x = canvas.width/4;
-            ball.y = 100;
+            //where the ball starts off from again when you die
+            ball.x = 400;
+            ball.y = 200;
         }
 
         // Update the x and y coordinates of the ball to keep it moving.
 		ball.x += ball.velocityX;
         ball.y += ball.velocityY;
-          
-        //Tells the browser you wish to perform an animation 
-        //and requests the browser to call a specific function 
-        //to update an animation before the next repaint
-        //window.requestAnimationFrame(repeatme); 
           
         window.addEventListener('keydown', movePaddle, true);
       } 

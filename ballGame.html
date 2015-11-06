@@ -34,8 +34,9 @@
       var ctx = canvas.getContext("2d");
        
       //ball object variables
-      var ball = {"x": canvas.width/4, "y": 100, "r": 10, "velocityX": 3, "velocityY": 3};
-       
+      var ball = {"x": canvas.width/4, "y": 250, "r": 10, "velocityX": 3, "velocityY": 3};
+        
+
       //paddle object variables with drawPaddle function inside
       var paddle = {
             position: {
@@ -53,41 +54,32 @@
               ctx.closePath();
             }
        }
-      
-      
-       /*
-       //brick object variables
-       var rows = 3;
-       var columns = 5;
-       var width = 75;
-       var height = 20;
-       var padding = 10;//the padding between the bricks so they wont touch eachother
-       var topOffSet = 30;//the offsets is so that the bricks wont be drawn directly from the edge of the canvas
-       var leftOffSet = 30;
-       */
-      
+
       //brick variables
       var rowCount = 6;
       var colCount = 16;
       var width = 50;
       var height = 20;
-      var padding = 10;
-      var topOffSet = 25;
+      var padding = 10;//the padding between the bricks so they wont touch eachother
+      var topOffSet = 25;//the offsets is so that the bricks wont be drawn directly from the edge of the canvas
       var leftOffSet = 25;
 
+        
+      //This two dimensional array will loop through the rows and columns and create the bricks on the canvas   
       var bricks = [];
-       for(c=0; c<colCount; c++) {
-          bricks[c] = [];
-          for(r=0; r<rowCount; r++) {
-              bricks[c][r] = { x: 0, y: 0 };
+       for(col=0; col<colCount; col++) {
+          bricks[col] = [];
+          for(row=0; row<rowCount; row++) {
+              bricks[col][row] = { x: 0, y: 0, status: 1};//this helps the brick disappear after being hit
           }
       }
 
+      
       // Function to draw the ball
       function drawBall() { 
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
-        ctx.fillStyle = "#000000";
+        ctx.fillStyle = "#000000";//colour black
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
@@ -104,24 +96,51 @@
                   paddle.position.y -= 20;
               }
           }
-      }//movePaddle
+      }
       
         
+        
+      /*This function loops through the array and draws the bricks on the screen. Only problem
+        is that all the bricks are being drawn at (0, 0).
+        Tha'ts why i added the brick x any y variables which move the next brick to the right 
+        and so forth
+      */
       function drawBricks() {
-            for(c=0; c<colCount; c++) {
-                for(r=0; r<rowCount; r++) {
-                    var brickX = (c*(width+padding))+leftOffSet;
-                    var brickY = (r*(height+padding))+topOffSet;
-                    bricks[c][r].x = brickX;
-                    bricks[c][r].y = brickY;
-                    ctx.beginPath();
-                    ctx.rect(brickX, brickY, width, height);
-                    ctx.fillStyle = "#DF7401";
-                    ctx.fill();
-                    ctx.closePath();
+            for(col=0; col<colCount; col++) {
+                for(row=0; row<rowCount; row++) {
+                    //this if checks the status of each brick before drawing it.
+                    //if status is equal to 1 it draws it, if 0 it doesn't draw it
+                    if(bricks[col][row].status ==1){
+                        var brickX = (col*(width+padding))+leftOffSet;
+                        var brickY = (row*(height+padding))+topOffSet;
+                        bricks[col][row].x = brickX;
+                        bricks[col][row].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, width, height);
+                        ctx.fillStyle = "#DF7401";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
                 }
             }
-        }    
+        }   
+        
+        
+        function brickCollisionDetection() {
+            for(col=0; col<colCount; col++) {
+                for(row=0; row<rowCount; row++) {
+                    var b = bricks[col][row];
+                    if(b.status==1){
+                        //if the brick is his it's status is set to 0, which makes the brick disappear
+                        if((ball.x > b.x) && (ball.x < b.x+width) && (ball.y > b.y) && (ball.y < b.y+height)) {
+                            ball.velocityY = -ball.velocityY;
+                            b.status = 0;
+                        }
+                    }
+                    
+                }
+            }
+        }
         
         
         
@@ -131,22 +150,21 @@
         //This constantly updates the moving objects so it doesn't leave a single straight line
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //canvas.width = canvas.width;  
-        drawBricks();
+        drawBricks();//calls the draw brick function
         drawBall();//calls the draw ball function
         paddle.drawPaddle();//calls the drawPaddle function
+        brickCollisionDetection();//calls the brick collision detection function
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (ball.x + ball.velocityX > canvas.width - ball.r || ball.x + ball.velocityX < ball.r) {
             ball.velocityX  = -ball.velocityX;
         }    
-        /*if (ball.y + ball.velocityY + ball.r <= 0) {
-            ball.velocityY -= ball.velocityY;
-        }*/
           
         if ((ball.y > paddle.position.x - ball.r) && ((ball.x > paddle.position.y &&
                     (ball.x < paddle.position.y + 120))) || (ball.y <= ball.r)){
             ball.velocityY = -ball.velocityY;
         }
+        //if the ball hit the bottom of the canvas the game ends
         else if (ball.y + ball.velocityY > canvas.height + ball.r) {
             alert("Game over!");
             ball.x = canvas.width/4;
@@ -166,7 +184,7 @@
       } 
         
       // Get the animation going.
-      setInterval(repeatme, 10);
+      setInterval(repeatme, 10); 
       
         
     </script>

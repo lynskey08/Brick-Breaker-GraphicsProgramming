@@ -48,37 +48,46 @@
             },
             //Draw the paddle function
             drawPaddle: function(){ 
-                //ctx.beginPath();
+              ctx.beginPath();
               ctx.fillRect(paddle.position.y, paddle.position.x, paddle.size.w, paddle.size.h); //draws the paddle and positions it
-                //ctx.closePath();
+              ctx.closePath();
             }
        }
       
-       //brick object variables
-      var brick = {
-          rows: 3,
-          columns: 5,
-          width: 75,
-          height: 20,
-          padding: 10,//the padding between the bricks so they wont touch eachother
-          topOffSet: 30,//the offsets is so that the bricks wont be drawn directly from the edge of the canvas
-          leftOffSet: 30;
-      }
       
-      //bricks two dimensional array - all bricks will be held here
+       /*
+       //brick object variables
+       var rows = 3;
+       var columns = 5;
+       var width = 75;
+       var height = 20;
+       var padding = 10;//the padding between the bricks so they wont touch eachother
+       var topOffSet = 30;//the offsets is so that the bricks wont be drawn directly from the edge of the canvas
+       var leftOffSet = 30;
+       */
+      
+      //brick variables
+      var rowCount = 6;
+      var colCount = 16;
+      var width = 50;
+      var height = 20;
+      var padding = 10;
+      var topOffSet = 25;
+      var leftOffSet = 25;
+
       var bricks = [];
-      for(c = 0; c < colCount; c++) {//brick columns
+       for(c=0; c<colCount; c++) {
           bricks[c] = [];
-          for(r = 0; r < rowCount; r++) {brick rows
-              bricks[c][r] = { x: 0, y: 0 };//to position the bricks
+          for(r=0; r<rowCount; r++) {
+              bricks[c][r] = { x: 0, y: 0 };
           }
       }
-
 
       // Function to draw the ball
       function drawBall() { 
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
+        ctx.fillStyle = "#000000";
         ctx.fill();//Makes the circle filled in
         ctx.closePath();
       }
@@ -97,14 +106,24 @@
           }
       }//movePaddle
       
-    /*
-      //Function to draw the paddle
-      function paddle() {
-          ctx.beginPath();
-          ctx.fillRect(paddleX, canvas.height-paddleH, paddleW, paddleH);
-          ctx.closePath();
-      }
-      */
+        
+      function drawBricks() {
+            for(c=0; c<colCount; c++) {
+                for(r=0; r<rowCount; r++) {
+                    var brickX = (c*(width+padding))+leftOffSet;
+                    var brickY = (r*(height+padding))+topOffSet;
+                    bricks[c][r].x = brickX;
+                    bricks[c][r].y = brickY;
+                    ctx.beginPath();
+                    ctx.rect(brickX, brickY, width, height);
+                    ctx.fillStyle = "#DF7401";
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        }    
+        
+        
         
       // A function to repeat every time the animation loops.
       function repeatme() {
@@ -112,11 +131,9 @@
         //This constantly updates the moving objects so it doesn't leave a single straight line
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //canvas.width = canvas.width;  
+        drawBricks();
         drawBall();//calls the draw ball function
-        
-        ctx.beginPath(); 
         paddle.drawPaddle();//calls the drawPaddle function
-        ctx.closePath();
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (ball.x + ball.velocityX > canvas.width - ball.r || ball.x + ball.velocityX < ball.r) {

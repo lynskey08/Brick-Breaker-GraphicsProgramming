@@ -11,7 +11,9 @@
 
 * I used my Graphics Programming lecturer's, [Ian Mcloughlins github](https://github.com/ianmcloughlin)'s examples to help better understand the concept of javascript and html5 animations. 
  
-* I also used [https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Build_the_brick_field](https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Build_the_brick_field) page to help with the drawing of the bricks on the canvas, and with the collision detection when the ball hits the bricks.I found this page extremely useful and easy to understand which contributed a lot to the project and my now understanding of javascript and html.
+* I also used [https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Build_the_brick_field](https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Build_the_brick_field) page to help with the drawing of the bricks on the canvas, and with the collision detection when the ball hits the bricks.I found this page extremely useful and easy to understand which help me a lot.
+
+* I'm also going to give credit to my friends in class who helped with certain parts of the program.
 
 * I also used other various websites such as:
 

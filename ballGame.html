@@ -166,7 +166,7 @@
         drawBall();//calls the draw ball function
         paddle.drawPaddle();//calls the drawPaddle function
         brickCollisionDetection();//calls the brick collision detection function
-        bricksBroke();//
+        bricksBroke();
 
 		// Stops the animation from leaving the canvas(collision decection).
         if (ball.x + ball.velocityX > canvas.width - ball.r || ball.x + ball.velocityX < ball.r) {
@@ -189,13 +189,12 @@
 		ball.x += ball.velocityX;
         ball.y += ball.velocityY;
           
-        window.addEventListener('keydown', movePaddle, true);
+        window.addEventListener('keydown', movePaddle, true);//sets the arrow keys equal to true when pressed
         
+        //helps the browser render the game better
         requestAnimationFrame(repeatme);
       } 
         
-      // Get the animation going.
-      //setInterval(repeatme, 10); 
       repeatme();
       
         
